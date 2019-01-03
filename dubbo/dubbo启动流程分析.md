@@ -1,6 +1,14 @@
 ## dubbo 启动分析
 
-在DubboAutoConfiguration  dubbo-springboot的自动初始化类中。注入了ServiceAnnotationBeanPostProcessor。
+### DubboComponentScan注入ServiceAnnotationBeanPostProcessor
+
+注解@DubboComponentScan上有@Import(DubboComponentScanRegistrar.class)，DubboComponentScanRegistrar中registerServiceAnnotationBeanPostProcessor(packagesToScan, registry);中向容器中注入了ServiceAnnotationBeanPostProcessor。
+
+
+
+### DubboAutoConfiguration注入ServiceAnnotationBeanPostProcessor
+
+在DubboAutoConfiguration  dubbo-springboot的自动初始化类中。在配置了dubbo.scan属性的时候注入了ServiceAnnotationBeanPostProcessor。
 
 ```java
 @ConditionalOnProperty(name = BASE_PACKAGES_PROPERTY_NAME)
@@ -10,7 +18,12 @@ public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(Env
     Set<String> packagesToScan = environment.getProperty(BASE_PACKAGES_PROPERTY_NAME, Set.class, emptySet());
     return new ServiceAnnotationBeanPostProcessor(packagesToScan);
 }
+
 ```
+
+
+
+### ServiceAnnotationBeanPostProcessor
 
 1. ServiceAnnotationBeanPostProcessor 类实现BeanDefinitionRegistryPostProcessor。
 2. ServiceAnnotationBeanPostProcessor的postProcessBeanDefinitionRegistry方法中调用。
