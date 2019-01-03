@@ -10,9 +10,7 @@
 
 createApplicationContext。在追踪代码，最终创建AnnotationConfigServletWebServerApplicationContext。
 
-
-
-###spring boot 中创建web容器
+### spring boot 中创建web容器
 
 在onRefresh中，创建createWebServer（Web容器）。
 
@@ -62,9 +60,7 @@ protected void finishRefresh() {
 
 在ApplicationContext容器refresh完成后startWebServer，开启webserver。
 
-
-
-###spring boot 中创建DispatcherServlet
+### spring boot 中创建DispatcherServlet
 
 在DispatcherServletAutoConfiguration中，注入了DispatcherServletRegistrationBean：
 
