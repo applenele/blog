@@ -47,6 +47,31 @@ private void createWebServer() {
 }
 ```
 
+
+
+```java
+	private org.springframework.boot.web.servlet.ServletContextInitializer    getSelfInitializer() {
+		return this::selfInitialize;
+	}
+
+	private void selfInitialize(ServletContext servletContext) throws ServletException {
+		prepareWebApplicationContext(servletContext);
+		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		ExistingWebApplicationScopes existingScopes = new ExistingWebApplicationScopes(
+				beanFactory);
+		WebApplicationContextUtils.registerWebApplicationScopes(beanFactory,
+				getServletContext());
+		existingScopes.restore();
+		WebApplicationContextUtils.registerEnvironmentBeans(beanFactory,
+				getServletContext());
+		for (ServletContextInitializer beans : getServletContextInitializerBeans()) {
+			beans.onStartup(servletContext);
+		}
+	}
+```
+
+通过getSelfInitializer调用所有实现ServletContextInitializer接口的类的onStartup方法。
+
 ```java
 @Override
 protected void finishRefresh() {
@@ -81,7 +106,27 @@ public DispatcherServletRegistrationBean dispatcherServletRegistration(
 }
 ```
 
-TomcatStarter实现ServletContainerInitializer，在web容器启动时候，容器去调用TomcatStarter的onStartup方法。进而调用ServletRegistrationBean的onStartup的方法。将DispatcherServlet注入到容器中。
+TomcatStarter实现ServletContainerInitializer，在web容器启动时候，容器去调用TomcatStarter的onStartup方法。
+
+```java
+@Override
+public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
+    throws ServletException {
+    try {
+        
+       // 调用创建的webserver传入的getSelfInitializer()的onStartup方法
+        for (ServletContextInitializer initializer : this.initializers) {
+            initializer.onStartup(servletContext);
+        }
+    }
+    catch (Exception ex) {
+    }
+}
+```
+
+进而实现了ServletContextInitializer接口的类的onStartup方法。进而调用ServletRegistrationBean的onStartup的方法。将DispatcherServlet注入到容器中。
+
+
 
 
 
