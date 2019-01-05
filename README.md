@@ -17,6 +17,12 @@
 
 
 
+### spring cloud
+
+[spring cloud zuul原理解析](./springcloud/spring cloud zuul原理解析.md)
+
+
+
 ### nginx
 
 1. [nginx配置url重写](./nginx/nginx配置url重写.md)
