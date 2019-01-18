@@ -225,7 +225,37 @@ public class Demo {
 }
 ```
 
+以ExecuteService形式提交：
 
+有以下两种方式：
+
+方式一：
+
+```java
+FutureTask<Integer> task = new FutureTask<>(call);
+// 启动线程去处理
+ExecutorService executorService = Executors.newFixedThreadPool(10);
+executorService.submit(task);
+System.out.println("main线程干点别的...");
+Integer result = task.get();
+```
+
+方式二：
+
+```java
+ExecutorService executorService = Executors.newFixedThreadPool(10);
+Future<Integer> future = executorService.submit(call);
+System.out.println("main线程干点别的...");
+Integer result = future.get();
+```
+
+submit传递Callable和Runnable都行。submit方法定义
+
+```java
+<T> Future<T> submit(Callable<T> task);
+<T> Future<T> submit(Runnable task, T result);
+Future<?> submit(Runnable task);
+```
 
 ## Future接口
 
