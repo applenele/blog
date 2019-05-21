@@ -63,13 +63,13 @@ SAVEOF <master_ip> <master_port>
 
 #### redis 哨兵机制
 
+> https://www.cnblogs.com/jaycekon/p/6237562.html
+
 1. 主要是保证redis 集群的高可用
 
 2. 心跳检测主备的主节点。
 
 3. 如果主节点挂了，就从从节点里面选一个做为主节点
-
-<https://www.cnblogs.com/jaycekon/p/6237562.html>
 
 ##### 配置
 
@@ -102,6 +102,8 @@ sentinel monitor mymaster 127.0.0.1 6380 2
 
 
 #### redis 集群
+
+> <http://blog.jobbole.com/114270/>
 
 即使使用哨兵，redis每个实例也是全量存储，每个redis存储的内容都是完整的数据，浪费内存且有木桶效应。为了最大化利用内存，可以采用cluster群集，就是分布式存储。即每台redis存储不同的内容。
 
